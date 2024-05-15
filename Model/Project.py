@@ -13,7 +13,7 @@ CORS(app)  # Enable CORS for all routes
 # logging.basicConfig(filename='api.log', level=logging.INFO)
 
 # Load the ML model using pickle
-with open('Model/modelFinals.pkl', 'rb') as model_file:
+with open('/Users/HP1030G2/Documents/FINAL YEAR PROJECT/Project/Model/model.pkl', 'rb') as model_file:
     model = pickle.load(model_file)
 
 
@@ -93,9 +93,14 @@ def predict():
     try:
         data = request.get_json()
 
-        
         if not data:
             return jsonify({'error': 'No data provided'}), 400
+
+        # Remove bankOrig and bankDest from the data
+        if 'bankOrig' in data:
+            del data['bankOrig']
+        if 'bankDest' in data:
+            del data['bankDest']
 
         # Perform preprocessing
         data_for_prediction = preprocess_data(pd.DataFrame([data]))
